@@ -1,4 +1,4 @@
 node_modules/
 dist/
-app.templates.js
+app/config/app.templates.js
 main.js
