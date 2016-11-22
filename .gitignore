@@ -1,1 +1,4 @@
 node_modules/
+dist/
+app/config/app.templates.js
+main.js
