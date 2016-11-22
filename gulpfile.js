@@ -8,6 +8,7 @@ var ngAnnotate    = require('browserify-ngannotate');
 var browserSync   = require('browser-sync').create();
 var rename        = require('gulp-rename');
 var sass          = require('gulp-sass');
+var series        = require('stream-series');
 var inject        = require('gulp-inject');
 var templateCache = require('gulp-angular-templatecache');
 var concat        = require('gulp-concat');
@@ -18,9 +19,10 @@ var config = {
   appName: 'myapp',
   jsFiles: 'app/**/*.js',
   templateFiles: 'app/**/*.html',
+  vendorCSSFiles: 'app/assets/vendor/**/*.css',
+  vendorJSFiles: 'app/assets/vendor/**/*.js',
   sassFiles: 'app/assets/sass/**/*.scss',
-  assetsCSS: 'app/assets/**/*.css',
-  assetsJS: 'app/assets/**/*.js',
+  assetsCSS: 'app/assets/css/**/*.css',
   production: !!util.env.production
 };
 
@@ -62,7 +64,7 @@ gulp.task('html', function() {
 });
 
 gulp.task('minify-css', ['sass'], function() {
-  return gulp.src(config.assetsCSS)
+  return gulp.src([config.vendorCSSFiles, config.assetsCSS])
     .pipe(concat('concat.css'))
     .pipe(rename(config.appName + '.min.css'))
     .pipe(cleanCSS({compatibility: 'ie8'}))
@@ -70,7 +72,7 @@ gulp.task('minify-css', ['sass'], function() {
 });
 
 gulp.task('uglify', ['browserify'], function() {
-  return gulp.src(['main.js', config.assetsJS])
+  return gulp.src(['main.js', config.vendorJSFiles])
     .pipe(concat('concat.js'))
     .pipe(rename(config.appName + '.min.js'))
     .pipe(uglify())
@@ -98,9 +100,13 @@ gulp.task('sass', function () {
 gulp.task('inject', ['sass', 'browserify'], function() {
   var target = gulp.src('./index.html');
 
-  var sources = gulp.src(['./main.js', config.assetsJS, config.assetsCSS], {read:false});
+  var vendorStreamCSS = gulp.src(config.vendorCSSFiles, {read:false});
 
-  return target.pipe(inject(sources, {relative:true}))
+  var vendorStreamJS = gulp.src(config.vendorJSFiles, {read:false});
+
+  var appStream = gulp.src(['./main.js', config.assetsCSS], {read:false});
+
+  return target.pipe(inject(series(vendorStreamCSS, appStream, vendorStreamJS), {relative:true}))
     .pipe(gulp.dest('./'));
 });
 
@@ -128,6 +134,7 @@ gulp.task('default', ['inject'], function() {
   gulp.watch(config.sassFiles, ['sass']);
   gulp.watch(config.templateFiles, ['views']);
   gulp.watch(config.assetsCSS, ['inject']);
-  gulp.watch(config.assetsJS, ['inject']);
+  gulp.watch(config.vendorCSSFiles, ['inject']);
+  gulp.watch(config.vendorJSFiles, ['inject']);
   gulp.watch(config.jsFiles, ['browserify']);
 });
