@@ -38,7 +38,7 @@ package.json
 A bit of explanation:
 
 ### app/assets/
-> Here goes all the files non related AngularJS such as `sass`, `css`, `fonts`, `images`, `vendor`, ...
+> Here goes all the files non related with AngularJS such as `sass`, `css`, `fonts`, `images`, `vendor`, ...
 
 ### app/components/
 > This is the place for the [Angular components](https://docs.angularjs.org/guide/component) that are used across several modules of your application. 
