@@ -52,7 +52,7 @@ A bit of explanation:
 > This is a mockup module that can be used as a starting point
 
 ### app/layout/
-> This is the base module that have shared components like `header`, `footer`... and the ui-view where the rest of the application is built on.
+> This is the base module that have shared components like `header`, `footer`... and the `ui-view` where the rest of the application is built on.
 
 ### app/services/
 > Here is where your services live. It makes sense to have them in their own folder because they can be used across several modules.
