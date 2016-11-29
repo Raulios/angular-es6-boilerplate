@@ -42,7 +42,8 @@ A bit of explanation:
 
 ### app/components/
 > This is the place for the [Angular components](https://docs.angularjs.org/guide/component) that are used across several modules of your application. 
-**NOTE: If a component only belongs to a certain module it should be inside that module folder**
+
+> **NOTE: If a component only belongs to a certain module it should be inside that module folder**
 
 ### app/config/
 > Here you put all the configuration files for your application such as `config`, `constants`, `run`... It also holds the generated `templates` by [templateCache](https://www.npmjs.com/package/gulp-angular-templatecache).
